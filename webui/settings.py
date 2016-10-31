@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'solo',
     'tmqrwebui',
+    'app_quotes'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -143,15 +144,3 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
 ]
 
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    },
-    'local': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    },
-}
-
-SOLO_CACHE = 'local'

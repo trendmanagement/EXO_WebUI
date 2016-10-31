@@ -12,6 +12,11 @@ class SeparatedValuesField(models.TextField):
         self.token = kwargs.pop('token', ',')
         super(SeparatedValuesField, self).__init__(*args, **kwargs)
 
+    def from_db_value(self, value, expression, connection, context):
+        if value is None:
+            return value
+        return self.to_python(value)
+
     def to_python(self, value):
         if not value:
             return
@@ -25,6 +30,9 @@ class SeparatedValuesField(models.TextField):
         assert(isinstance(value, list) or isinstance(value, tuple))
         return self.token.join([s for s in value])
 
+    def get_prep_value(self, value):
+        return self.to_python(value)
+
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
         return self.get_db_prep_value(value)
@@ -35,7 +43,7 @@ class SiteConfiguration(SingletonModel):
     site_name = models.CharField(max_length=255, default='Site Name')
 
     maintenance_mode = models.BooleanField(default=False)
-    insruments_list = SeparatedValuesField(default=('',))
+    insruments_list = SeparatedValuesField(token='\n', default=('',))
 
 
     def __unicode__(self):
