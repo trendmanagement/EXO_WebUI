@@ -6,4 +6,4 @@ autostart=true
 stdout_logfile = /home/%(user)s/logs/%(proj_name)s_supervisor
 autorestart=true
 redirect_stderr=true
-environment=LANG="%(locale)s",LC_ALL="%(locale)s",LC_LANG="%(locale)s"
+environment=LANG="%(locale)s",LC_ALL="%(locale)s",LC_LANG="%(locale)s",PYTHONPATH="/var/data/tmqrengine"

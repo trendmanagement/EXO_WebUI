@@ -144,3 +144,18 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
 ]
 
+# Allow any settings to be defined in local_settings.py which should be
+# ignored in your version control system allowing for settings to be
+# defined per machine.
+try:
+    from webui.local_settings import *
+except ImportError as e:
+    if "local_settings" not in str(e):
+        raise e
+
+try:
+    from webui.fabutils import set_dynamic_settings
+except ImportError:
+    pass
+else:
+    set_dynamic_settings(globals())

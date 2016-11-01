@@ -24,7 +24,7 @@ server {
     #%(ssl_disabled)s ssl_prefer_server_ciphers on;
 
     # Uncomment for production
-    include pagespeed.conf;
+    #include pagespeed.conf;
 
     # Deny illegal Host headers
     if ($host !~* ^(%(domains_regex)s)$) {

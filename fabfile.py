@@ -475,7 +475,7 @@ def create():
                 run("rm -rf %s" % env.proj_name)
             else:
                 abort()
-        run("virtualenv -p python3.4 %s" % env.proj_name)
+        run("virtualenv -p python3.5 %s" % env.proj_name)
 
     # Upload project files
     if env.deploy_tool in env.vcs_tools:
