@@ -9,6 +9,7 @@ from exobuilder.data.datasource_hybrid import DataSourceHybrid
 from webui.site_settings import *
 from datetime import datetime
 from exobuilder.algorithms.rollover_helper import RolloverHelper
+from pymongo import MongoClient
 
 
 #
@@ -100,6 +101,60 @@ def get_exo_list_info():
     return result
 
 
+def get_actual_alphas():
+    client = MongoClient(MONGO_CONNSTR)
+    db = client[MONGO_EXO_DB]
+
+    #
+    # Get all campaigns for active accounts
+    #
+    active_campaigns = db['accounts'].aggregate(
+        [
+            {
+                '$group': {
+                    '_id': None,
+                    'campaign_name': {'$addToSet': '$campaign_name'},
+                }
+            }
+        ])
+
+    campaign_list = []
+    for cmp_rec in active_campaigns:
+        campaign_list += cmp_rec['campaign_name']
+
+    #
+    # Get alpha list for each campaign
+    #
+    result = OrderedDict()
+
+    # Keep only unique campaign_names
+    for cmp_name in list(set(campaign_list)):
+        campaign = db['campaigns'].find({'name': cmp_name}).next()
+
+        alpha_names_list = list(campaign['alphas'].keys())
+        alphas_dict = result.setdefault(cmp_name, OrderedDict())
+
+        for alpha_data in db['swarms'].find({'swarm_name': {'$in': alpha_names_list}}):
+
+            swarm_name = alpha_data['swarm_name']
+
+            alphas_dict[swarm_name] = {
+                'swarm_name': swarm_name,
+                'last_date':  alpha_data['last_date'],
+                'last_rebalance_date': alpha_data['last_rebalance_date'],
+                'last_exposure': alpha_data['last_exposure'],
+                'last_prev_exposure': alpha_data['last_prev_exposure'],
+                'calc_date': datetime(1900, 1, 1) if 'calc_date' not in alpha_data else alpha_data['calc_date'],
+            }
+
+        # Check if some alphas were not found in the DB
+        for missed_alpha in alpha_names_list:
+            if missed_alpha not in alphas_dict:
+                alphas_dict[missed_alpha] = False
+
+    return result
+
+
 #
 #
 # Views
@@ -118,6 +173,7 @@ def view_quotes_monitor(request):
     }
     return render(request, 'quotes_monitor.html', context=context)
 
+
 def view_quotes_exo(request):
     config = SiteConfiguration.objects.get()
 
@@ -127,3 +183,14 @@ def view_quotes_exo(request):
         'exo_info': get_exo_list_info()
     }
     return render(request, 'quotes_exo.html', context=context)
+
+
+def view_actual_alphas(request):
+    config = SiteConfiguration.objects.get()
+
+    context = {
+        'page_name': 'Actual alphas monitoring',
+        'site_name': config.site_name,
+        'alphas_info': get_actual_alphas()
+    }
+    return render(request, 'quotes_alphas.html', context=context)
