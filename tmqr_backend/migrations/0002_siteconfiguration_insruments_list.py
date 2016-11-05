@@ -3,19 +3,19 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import tmqrwebui.models
+import tmqr_backend.models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tmqrwebui', '0001_initial'),
+        ('tmqr_backend', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='siteconfiguration',
             name='insruments_list',
-            field=tmqrwebui.models.SeparatedValuesField(default=''),
+            field=tmqr_backend.models.SeparatedValuesField(default=''),
         ),
     ]

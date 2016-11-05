@@ -58,4 +58,13 @@ a :active, a :focus {
     display: inline-block;
     border-radius: 50%; }
 
+.preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url("../img/preloader.gif") center no-repeat; }
+
 /*# sourceMappingURL=styles.css.map */

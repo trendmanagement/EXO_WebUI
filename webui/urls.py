@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from tmqrwebui.views import *
+from tmqr_backend.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r"^$", view_mainpage, name='index'),
-    url(r'^quotes/', include('app_quotes.urls')),
+    url(r'^api/', include('tmqr_backend.urls')),
 ]

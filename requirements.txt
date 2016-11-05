@@ -5,3 +5,6 @@ pymongo
 pika
 pandas
 numpy
+djangorestframework
+markdown
+django-filter

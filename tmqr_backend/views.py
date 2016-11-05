@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from tmqrwebui.models import SiteConfiguration
+from webui.site_settings import *
+from tmqr_backend.models import SiteConfiguration
+from django.shortcuts import render
+from tmqr_backend.models import SiteConfiguration
 import pickle
 import pandas as pd
 from collections import OrderedDict
@@ -10,6 +13,23 @@ from webui.site_settings import *
 from datetime import datetime
 from exobuilder.algorithms.rollover_helper import RolloverHelper
 from pymongo import MongoClient
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.http import HttpResponse
+
+
+# Create your views here.
+def view_mainpage(request):
+    config = SiteConfiguration.get_solo()
+
+    context = {
+        'site_name': config.site_name,
+        'page_name': 'Dashboard',
+    }
+    return render(request, 'base.html', context=context)
+
+
+
 
 
 #
@@ -162,6 +182,7 @@ def get_actual_alphas():
 #
 
 # Create your views here.
+@api_view(['GET'])
 def view_quotes_monitor(request):
     config = SiteConfiguration.objects.get()
 
@@ -171,9 +192,10 @@ def view_quotes_monitor(request):
         'site_name': config.site_name,
         'quotes_info': get_instrument_recent_quotes(config.insruments_list, datetime.now())
     }
-    return render(request, 'quotes_monitor.html', context=context)
+    return Response(context)
 
 
+@api_view(['GET'])
 def view_quotes_exo(request):
     config = SiteConfiguration.objects.get()
 
@@ -182,9 +204,10 @@ def view_quotes_exo(request):
         'site_name': config.site_name,
         'exo_info': get_exo_list_info()
     }
-    return render(request, 'quotes_exo.html', context=context)
+    return Response(context)
 
 
+@api_view(['GET'])
 def view_actual_alphas(request):
     config = SiteConfiguration.objects.get()
 
@@ -193,4 +216,4 @@ def view_actual_alphas(request):
         'site_name': config.site_name,
         'alphas_info': get_actual_alphas()
     }
-    return render(request, 'quotes_alphas.html', context=context)
+    return Response(context)
