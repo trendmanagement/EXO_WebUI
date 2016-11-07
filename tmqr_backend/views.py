@@ -79,11 +79,11 @@ def get_instrument_recent_quotes(instruments_list, date_now):
             'opt_series': '{0} {1}'.format(months_series[opt_chain[0].c.month_int-1], opt_chain.expiration.year),
             #
             'exec_time': exec_time,
-            'exec_price_fut': exec_time_fut,
+            'exec_price_fut_price': exec_time_fut.price,
             'exec_time_quote_date': exec_time_fut.price_quote_date, # The time when the real quote occurred
 
             'decision_time': decision_time,
-            'decision_time_fut': decision_time_fut,
+            'decision_time_fut_price': decision_time_fut.price,
             'decision_time_quote_date': decision_time_fut.price_quote_date, # The time when the real quote occurred
         }
 

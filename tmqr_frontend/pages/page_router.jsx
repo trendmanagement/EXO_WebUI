@@ -5,6 +5,9 @@
 import React from 'react';
 
 import QuotesEXOComponent from './quotes_exo_component.jsx';
+import QuotesAlphasComponent from './quote_alphas_component.jsx'
+import QuotesContractsComponent from './quote_contracts_component.jsx'
+
 import PreloadAnimation from '../common/preload_animation.jsx'
 
 class PageRouter extends React.Component {
@@ -22,6 +25,10 @@ class PageRouter extends React.Component {
                 return (<h1>Index page</h1>);
             case 'quotes_exo':
                 return (<QuotesEXOComponent/>);
+            case 'quotes_contracts':
+                return (<QuotesContractsComponent/>);
+            case 'quotes_alphas':
+                return (<QuotesAlphasComponent/>);
             default:
                 return (<h1>Page not found</h1>);
         }
