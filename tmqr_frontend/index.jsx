@@ -22,6 +22,7 @@ class App extends React.Component {
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">
                         <ul className="nav navbar-nav navbar-right">
+                            <li><a href="/documentation/out/html/index.html">Documentation</a></li>
                             <li><a href="/admin/">Settings</a></li>
                         </ul>
                     </div>

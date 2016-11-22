@@ -98,7 +98,7 @@ function AlphaItem(props) {
     {
         return (
             <tr>
-                <td>{ rops.xinfo.swarm_name }</td>
+                <td>{ props.xinfo.swarm_name }</td>
                 <td colSpan="5">Swarm data is not found in the DB.</td>
             </tr>
         )

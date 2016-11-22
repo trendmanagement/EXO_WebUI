@@ -59,4 +59,12 @@ server {
         log_not_found   off;
     }
 
+    location /documentation/ {
+        root            /var/data/tmqrengine/;
+        access_log      off;
+        log_not_found   off;
+        expires 30d;
+        index index.html;
+    }
+
 }

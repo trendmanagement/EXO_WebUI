@@ -121,6 +121,15 @@
 	                                    null,
 	                                    _react2.default.createElement(
 	                                        'a',
+	                                        { href: '/documentation/out/html/index.html' },
+	                                        'Documentation'
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'a',
 	                                        { href: '/admin/' },
 	                                        'Settings'
 	                                    )
@@ -37356,7 +37365,7 @@
 	            _react2.default.createElement(
 	                'td',
 	                null,
-	                rops.xinfo.swarm_name
+	                props.xinfo.swarm_name
 	            ),
 	            _react2.default.createElement(
 	                'td',
