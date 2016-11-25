@@ -29,6 +29,10 @@ class PageRouter extends React.Component {
                 return (<QuotesContractsComponent/>);
             case 'quotes_alphas':
                 return (<QuotesAlphasComponent/>);
+            case 'gmi_fees':
+                return (<GMIFeeComponent/>);
+            case 'gmi_accounts':
+                return (<GMIAccountComponent/>);
             default:
                 return (<h1>Page not found</h1>);
         }
