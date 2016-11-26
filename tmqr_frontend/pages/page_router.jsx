@@ -7,8 +7,11 @@ import React from 'react';
 import QuotesEXOComponent from './quotes_exo_component.jsx';
 import QuotesAlphasComponent from './quote_alphas_component.jsx'
 import QuotesContractsComponent from './quote_contracts_component.jsx'
+import GMIFeeComponent from './fee_analysis_component.jsx'
+import GMIAccountComponent  from './account_performance_component.jsx'
 
 import PreloadAnimation from '../common/preload_animation.jsx'
+
 
 class PageRouter extends React.Component {
     /*
