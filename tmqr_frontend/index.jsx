@@ -40,6 +40,9 @@ class App extends React.Component {
                             <li><a onClick={() => this.onNewPageClick('quotes_contracts')}>Contracts quotes</a></li>
                             <li><a onClick={() => this.onNewPageClick('quotes_exo')}>EXO quotes</a></li>
                             <li><a onClick={() => this.onNewPageClick('quotes_alphas')}>Actual alphas</a></li>
+                        </ul>
+                        <h4>GMI Analysis</h4>
+                        <ul className="nav nav-sidebar">
                             <li><a onClick={() => this.onNewPageClick('gmi_fees')}>GMI Fees</a></li>
                             <li><a onClick={() => this.onNewPageClick('gmi_accounts')}>Account Performance</a></li>
                         </ul>

@@ -202,7 +202,16 @@
 	                                            } },
 	                                        'Actual alphas'
 	                                    )
-	                                ),
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                'GMI Analysis'
+	                            ),
+	                            _react2.default.createElement(
+	                                'ul',
+	                                { className: 'nav nav-sidebar' },
 	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
