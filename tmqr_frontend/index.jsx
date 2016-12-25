@@ -41,6 +41,11 @@ class App extends React.Component {
                             <li><a onClick={() => this.onNewPageClick('quotes_exo')}>EXO quotes</a></li>
                             <li><a onClick={() => this.onNewPageClick('quotes_alphas')}>Actual alphas</a></li>
                         </ul>
+                        <h4>GMI Analysis</h4>
+                        <ul className="nav nav-sidebar">
+                            <li><a onClick={() => this.onNewPageClick('gmi_fees')}>GMI Fees</a></li>
+                            <li><a onClick={() => this.onNewPageClick('gmi_accounts')}>Account Performance</a></li>
+                        </ul>
                     </div>
                     <div className="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                         <PageRouter page_name={this.state.current_page}/>
