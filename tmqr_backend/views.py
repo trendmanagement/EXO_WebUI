@@ -178,11 +178,11 @@ def get_actual_alphas():
 
     return result
 
+
+
 def get_gmi_fees(start_date, end_date):
     tmp_mongo_connstr = 'mongodb://tmqr:tmqr@10.0.1.2/client-gmi?authMechanism=SCRAM-SHA-1'
     tmp_mongo_db = 'client-gmi'
-def get_events_log():
-    pass
 
     mongoClient = MongoClient(tmp_mongo_connstr)
     db = mongoClient[tmp_mongo_db]
@@ -411,6 +411,10 @@ def get_account_performance(start_date, end_date):
             accountdata_list_out.append(quotes_context);
 
     return accountdata_list_out
+
+def get_events_log():
+    pass
+
 #
 #
 # Views
