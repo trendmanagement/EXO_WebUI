@@ -7,9 +7,12 @@ import React from 'react';
 import QuotesEXOComponent from './quotes_exo_component.jsx';
 import QuotesAlphasComponent from './quote_alphas_component.jsx'
 import QuotesContractsComponent from './quote_contracts_component.jsx'
+import GMIFeeComponent from './fee_analysis_component.jsx'
+import GMIAccountComponent  from './account_performance_component.jsx'
 import EventsLogComponent from './events_log.jsx'
 
 import PreloadAnimation from '../common/preload_animation.jsx'
+
 
 class PageRouter extends React.Component {
     /*
@@ -32,6 +35,10 @@ class PageRouter extends React.Component {
                 return (<QuotesAlphasComponent/>);
             case 'events_log':
                 return (<EventsLogComponent/>);
+            case 'gmi_fees':
+                return (<GMIFeeComponent/>);
+            case 'gmi_accounts':
+                return (<GMIAccountComponent/>);
             default:
                 return (<h1>Page not found</h1>);
         }
