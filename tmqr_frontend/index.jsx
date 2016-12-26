@@ -43,6 +43,7 @@ class App extends React.Component {
                         </ul>
                         <h4>Events</h4>
                         <ul className="nav nav-sidebar">
+                            <li><a onClick={() => this.onNewPageClick('events_status')}>Status summary</a></li>
                             <li><a onClick={() => this.onNewPageClick('events_log')}>Event log</a></li>
                         </ul>
                         <h4>GMI Analysis</h4>

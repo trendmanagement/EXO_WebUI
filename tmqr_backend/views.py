@@ -412,14 +412,42 @@ def get_account_performance(start_date, end_date):
 
     return accountdata_list_out
 
-def get_events_log():
-    pass
 
+def get_events_log(query_dict):
+    try:
+        page = max(1, int(query_dict.get('page', 1)))
+    except:
+        page = 1
+
+    client = MongoClient(MONGO_CONNSTR)
+    db = client[MONGO_EXO_DB]
+
+    records_per_page = 20
+
+    result_events = []
+
+    for status_rec in db[EVENTS_LOG].find({}).sort([("date", -1)]).skip((page-1)*records_per_page).limit(records_per_page):
+        status_rec['_id'] = str(status_rec['_id'])
+        result_events.append(status_rec)
+
+    return result_events
+
+def get_events_status():
+    client = MongoClient(MONGO_CONNSTR)
+    db = client[MONGO_EXO_DB]
+    result_events = []
+
+    for status_rec in db[EVENTS_STATUS].find({}).sort([("appclass", 1), ("appname", 1)]):
+        status_rec['_id'] = str(status_rec['_id'])
+        result_events.append(status_rec)
+
+    return result_events
 #
 #
 # Views
 #
 #
+
 
 # Create your views here.
 @api_view(['GET'])
@@ -458,6 +486,7 @@ def view_actual_alphas(request):
     }
     return Response(context)
 
+
 @api_view(['GET'])
 def view_fcm_fees(request, start_date, end_date):
 
@@ -466,6 +495,7 @@ def view_fcm_fees(request, start_date, end_date):
         'fee_info': get_gmi_fees(start_date, end_date)
     }
     return Response(context)
+
 
 @api_view(['GET'])
 def view_account_performance(request, start_date, end_date):
@@ -476,6 +506,7 @@ def view_account_performance(request, start_date, end_date):
     }
     return Response(context)
 
+
 @api_view(['GET'])
 def view_events_log(request):
     config = SiteConfiguration.objects.get()
@@ -483,6 +514,17 @@ def view_events_log(request):
     context = {
         'page_name': 'Event log',
         'site_name': config.site_name,
-        'events_info': get_events_log()
+        'events_info': get_events_log(request.GET)
+    }
+    return Response(context)
+
+@api_view(['GET'])
+def view_events_status(request):
+    config = SiteConfiguration.objects.get()
+
+    context = {
+        'page_name': 'Event log',
+        'site_name': config.site_name,
+        'events_info': get_events_status()
     }
     return Response(context)

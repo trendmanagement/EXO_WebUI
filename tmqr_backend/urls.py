@@ -8,6 +8,8 @@ urlpatterns = [
     url(r"^alphas/$", view_actual_alphas, name='quotes_actual_alphas'),
     url(r"^gmifees/(\d{4}-\d{2}-\d{2})/(\d{4}-\d{2}-\d{2})$", view_fcm_fees, name='gmi_fees'),
     url(r"^gmiaccountperformance/(\d{4}-\d{2}-\d{2})/(\d{4}-\d{2}-\d{2})$", view_account_performance, name='gmi_accounts'),
+    url(r"^events-log/$", view_events_log, name='view_event_log'),
+    url(r"^events-status/$", view_events_status, name='view_event_status'),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

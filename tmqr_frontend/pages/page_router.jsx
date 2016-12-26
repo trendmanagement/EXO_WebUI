@@ -10,6 +10,7 @@ import QuotesContractsComponent from './quote_contracts_component.jsx'
 import GMIFeeComponent from './fee_analysis_component.jsx'
 import GMIAccountComponent  from './account_performance_component.jsx'
 import EventsLogComponent from './events_log.jsx'
+import EventsStatusComponent from './events_status.jsx'
 
 import PreloadAnimation from '../common/preload_animation.jsx'
 
@@ -35,6 +36,8 @@ class PageRouter extends React.Component {
                 return (<QuotesAlphasComponent/>);
             case 'events_log':
                 return (<EventsLogComponent/>);
+            case 'events_status':
+                return (<EventsStatusComponent/>);
             case 'gmi_fees':
                 return (<GMIFeeComponent/>);
             case 'gmi_accounts':
