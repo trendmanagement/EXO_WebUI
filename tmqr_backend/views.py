@@ -17,6 +17,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponse
 
+EVENTS_STATUS = 'events_status'
+EVENTS_LOG = 'events_log'
+
 
 # Create your views here.
 def view_mainpage(request):
@@ -174,6 +177,8 @@ def get_actual_alphas():
 
     return result
 
+def get_events_log():
+    pass
 
 #
 #
@@ -215,5 +220,16 @@ def view_actual_alphas(request):
         'page_name': 'Actual alphas monitoring',
         'site_name': config.site_name,
         'alphas_info': get_actual_alphas()
+    }
+    return Response(context)
+
+@api_view(['GET'])
+def view_events_log(request):
+    config = SiteConfiguration.objects.get()
+
+    context = {
+        'page_name': 'Event log',
+        'site_name': config.site_name,
+        'events_info': get_events_log()
     }
     return Response(context)

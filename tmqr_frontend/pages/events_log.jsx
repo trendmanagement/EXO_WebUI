@@ -1,17 +1,17 @@
 /**
- * Created by ubertrader on 11/5/16.
+ * Created by ubertrader on 12/26/16.
  */
 import React from "react";
 import PreloadAnimation from '../common/preload_animation.jsx';
 
 var moment = require('moment');
 
-class QuotesEXOComponent extends React.Component {
+class EventsLogComponent extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data: {exo_info: {}},
+            data: {},
             is_loading: false,
         };
         this.getData = this.getData.bind(this);
@@ -29,8 +29,8 @@ class QuotesEXOComponent extends React.Component {
                     is_loading: true,
                 });
 
-        console.log('Requesting exo data')
-        return $.getJSON('/api/exo/')
+        console.log('Requesting events log')
+        return $.getJSON('/api/events-log/')
             .done((result) => {
                 this.setState({
                     data: result,
@@ -64,7 +64,7 @@ class QuotesEXOComponent extends React.Component {
     }
 }
 
-function ExoList(props) {
+function EventsList(props) {
     const listItems = Object.keys(props.exo_data).map((key) =>
             <ExoItem key={key} xinfo={props.exo_data[key]}/>
     );
@@ -96,7 +96,7 @@ function ExoList(props) {
     );
 }
 
-function ExoItem(props) {
+function EventItem(props) {
     return (
         <tr>
             <td>{ props.xinfo.exo_name }</td>
@@ -109,4 +109,4 @@ function ExoItem(props) {
 
 }
 
-export default QuotesEXOComponent;
+export default EventsLogComponent;

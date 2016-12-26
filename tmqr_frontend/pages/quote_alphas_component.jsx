@@ -40,6 +40,9 @@ class QuotesAlphasComponent extends React.Component {
             .fail(function( jqxhr, textStatus, error ) {
                 var err = textStatus + ', ' + error;
                 console.log( "Request Failed: " + err);
+                this.setState({
+                    is_loading: false
+                });
             })
     }
 
