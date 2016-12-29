@@ -28,7 +28,7 @@ DATABASES = {
 ###################
 
 # Domains for public site
-ALLOWED_HOSTS = ["10.0.1.2"]
+ALLOWED_HOSTS = ["10.0.1.4"]
 
 # These settings are used by the default fabfile.py provided.
 # Check fabfile.py for defaults.
@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ["10.0.1.2"]
 FABRIC = {
      "DEPLOY_TOOL": "rsync",  # Deploy with "git", "hg", or "rsync"
      "SSH_USER": "tmqrquant",  # VPS SSH username
-     "HOSTS": ["10.0.1.2"],  # The IP address of your VPS
+     "HOSTS": ["10.0.1.4"],  # The IP address of your VPS
      "DOMAINS": ALLOWED_HOSTS,  # Edit domains in ALLOWED_HOSTS
      "REQUIREMENTS_PATH": "requirements.txt",  # Project's pip requirements
      "LOCALE": "en_US.UTF-8",  # Should end with ".UTF-8"
