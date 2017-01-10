@@ -15,6 +15,8 @@ var config = {
 
     entry: APP_DIR + '/index.jsx',
 
+    externals: {jquery: 'var jQuery'},
+
     output: {
         path: BUILD_DIR,
         filename: 'bundle.js'
