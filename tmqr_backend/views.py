@@ -16,6 +16,11 @@ from pymongo import MongoClient
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponse
+from backtester.reports.campaign_report import CampaignReport
+import traceback
+from exobuilder.data.datasource_sql import DataSourceSQL
+from backtester.reports.payoffs import PayoffAnalyzer
+
 
 EVENTS_STATUS = 'events_status'
 EVENTS_LOG = 'events_log'
@@ -347,9 +352,17 @@ def get_gmi_fees(start_date, end_date):
 
         accountdata_list_out.append(quotes_context)
 
-
-
     return accountdata_list_out
+
+
+def return_error(message, **kwargs):
+    context={
+        'status': 'error',
+        'message': message,
+    }
+    context.update(kwargs)
+    print(context)
+    return Response(context)
 
 def choose_fcm_name(fcm_code):
     fcm_name_list = {'1':'ADM',
@@ -528,3 +541,131 @@ def view_events_status(request):
         'events_info': get_events_status()
     }
     return Response(context)
+
+@api_view(['GET'])
+def view_campaigns_list(request):
+    def get_campaign_instrument(alphas):
+        instr = set()
+        for k, v in alphas.items():
+            instr.add(k.split("_")[0])
+
+        if len(instr) > 1:
+            return 'MultiProduct'
+        elif len(instr) == 0:
+            return ''
+        else:
+            return instr.pop()
+
+    campaigns = []
+    storage = EXOStorage(MONGO_CONNSTR, MONGO_EXO_DB)
+
+    for cmp in storage.campaign_load(None):
+        cmp_name = cmp['name']
+        cmp_desc = cmp['description']
+        campaigns.append({
+            'name': cmp_name,
+            'description': cmp_desc,
+            'instrument': get_campaign_instrument(cmp['alphas'])
+        })
+    context = {'status': 'OK', 'campaigns': campaigns}
+
+    return Response(context)
+
+
+@api_view(['GET'])
+def view_campaigns_series(request):
+    try:
+        campaign = request.GET.get('campaign', '')
+        performance_fee_percentage = request.GET.get('performance_fee_percentage', 0.0)
+        commission_dollars = request.GET.get('commission_dollars', 0.0)
+        starting_date = datetime.strptime(request.GET.get('starting_date', '1900-01-01'), "%Y-%m-%d")
+        end_date = datetime.strptime(request.GET.get('end_date', '2100-01-01'), "%Y-%m-%d")
+
+        storage = EXOStorage(MONGO_CONNSTR, MONGO_EXO_DB)
+        rpt = CampaignReport(campaign, exo_storage=storage, raise_exceptions=True)
+
+        if starting_date > end_date:
+            return return_error("Starting date greater than end date.")
+
+        df = rpt.campaign_stats.ix[starting_date:end_date]
+        if len(df) < 2:
+            return return_error("Empty campaign series for required period.")
+
+        context = {
+            'campaign': campaign,
+            'starting_date': df.index[0],
+            'end_date': df.index[-1],
+            'starting_value': df['Equity'][0],
+            'end_value': df['Equity'][-1],
+            'total_number_of_trades': df[df['Costs'] != 0]['Costs'].count(),
+            'total_cost': df['Costs'].sum(),
+            'max_drawdown': (df['Equity'] - df['Equity'].expanding().max()).min(),
+            'max_delta': df['Delta'].max(),
+            'average_delta': df['Delta'].mean()
+        }
+
+        cmp_series = []
+
+        for i in range(len(df)):
+            r = df.iloc[i]
+            cmp_series.append({
+                'date': r.name,
+                'change': r['Change'],
+                'costs': r['Costs'],
+                'trade_count': 0,
+                'delta': r['Delta'],
+                'equity': r['Equity']
+            })
+        context['series'] = cmp_series
+        context['status'] = 'OK'
+        return Response(context)
+    except Exception as exc:
+        return return_error(str(exc), traceback=traceback.format_exc())
+
+
+@api_view(['GET'])
+def view_campaigns_payoff(request):
+    try:
+        strikes_on_graph = request.GET.get('nstrikes', 30)
+        analysis_date = request.GET.get('date', None)
+        if analysis_date is not None:
+            analysis_date = datetime.strptime(analysis_date, "%Y-%m-%d")
+        campaign = request.GET.get('campaign', '')
+
+        assetindex = AssetIndexMongo(MONGO_CONNSTR, MONGO_EXO_DB)
+        storage = EXOStorage(MONGO_CONNSTR, MONGO_EXO_DB)
+        futures_limit = 3
+        options_limit = 20
+        datasource = DataSourceSQL(SQL_HOST, SQL_USER, SQL_PASS, assetindex, futures_limit, options_limit, storage)
+
+        payoff = PayoffAnalyzer(datasource, raise_exceptions=True)
+        payoff.load_campaign(campaign, date=analysis_date)
+        pos_info = payoff.position_info()
+        payoffdf = payoff.calc_payoff(strikes_to_analyze=strikes_on_graph)
+
+        payoff_series = []
+        delta_series = []
+        for i in range(len(payoffdf)):
+            stike_payoff = payoffdf.iloc[i]
+            payoff_series.append({
+                "px": stike_payoff.name,
+                "curr": stike_payoff['current_payoff'],
+                "exp": stike_payoff['expiration_payoff']
+            })
+            delta_series.append({
+                "px": stike_payoff.name,
+                "curr": stike_payoff['current_delta'],
+                "expir": stike_payoff['expiration_delta']
+            })
+
+        return Response({
+            'status': 'OK',
+            "campaign": campaign,
+            "date": analysis_date if analysis_date is not None else datetime.now().date(),
+            "current_future_price": pos_info['current_ulprice'],
+            "positions": pos_info['whatif_positions'],
+            "payoff_series": payoff_series,
+            "delta_series": delta_series,
+        })
+    except Exception as exc:
+        return return_error(str(exc), traceback=traceback.format_exc())

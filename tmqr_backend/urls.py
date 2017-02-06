@@ -10,6 +10,8 @@ urlpatterns = [
     url(r"^gmiaccountperformance/(\d{4}-\d{2}-\d{2})/(\d{4}-\d{2}-\d{2})$", view_account_performance, name='gmi_accounts'),
     url(r"^events-log/$", view_events_log, name='view_event_log'),
     url(r"^events-status/$", view_events_status, name='view_event_status'),
-
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r"^campaigns/list/$", view_campaigns_list,  name='view_campaigns_list'),
+    url(r"^campaigns/series/$", view_campaigns_series,  name='view_campaigns_series'),
+    url(r"^campaigns/payoff/$", view_campaigns_payoff,  name='view_campaigns_payoff'),
 ]
