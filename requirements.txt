@@ -9,3 +9,5 @@ djangorestframework
 markdown
 django-filter
 matplotlib
+requests
+lxml
