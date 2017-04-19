@@ -85,7 +85,7 @@ def get_instrument_recent_quotes(instruments_list, date_now):
             'instrument': instrument,
             'date_now': date_now,
             'fut_contract': exec_time_fut.name,
-            'opt_series': '{0} {1}'.format(months_series[opt_chain[0].c.month_int-1], opt_chain.expiration.year),
+            #'opt_series': '{0} {1}'.format(months_series[opt_chain[0].c.month_int-1], opt_chain.expiration.year),
             #
             'exec_time': exec_time,
             'exec_price_fut_price': exec_time_fut.price,
