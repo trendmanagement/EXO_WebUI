@@ -18,7 +18,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from backtester.reports.campaign_report import CampaignReport
 import traceback
-from exobuilder.data.datasource_sql import DataSourceSQL
+from exobuilder.data.datasource_mongo import DataSourceMongo
 from backtester.reports.payoffs import PayoffAnalyzer
 
 
@@ -56,7 +56,7 @@ def get_instrument_recent_quotes(instruments_list, date_now):
     #
     tmp_mongo_connstr = 'mongodb://tml:tml@10.0.1.2/tmldb_test?authMechanism=SCRAM-SHA-1'
     tmp_mongo_db = 'tmldb_test'
-    datasource = DataSourceHybrid(SQL_HOST, SQL_USER, SQL_PASS, assetindex, tmp_mongo_connstr, tmp_mongo_db,
+    datasource = DataSourceHybrid(MONGO_CONNSTR, MONGO_EXO_DB, assetindex, tmp_mongo_connstr, tmp_mongo_db,
                                   3, 10, exostorage)
 
     result = []
@@ -636,7 +636,7 @@ def view_campaigns_payoff(request):
         storage = EXOStorage(MONGO_CONNSTR, MONGO_EXO_DB)
         futures_limit = 3
         options_limit = 20
-        datasource = DataSourceSQL(SQL_HOST, SQL_USER, SQL_PASS, assetindex, futures_limit, options_limit, storage)
+        datasource = DataSourceMongo(MONGO_CONNSTR, MONGO_EXO_DB, assetindex, futures_limit, options_limit, storage)
 
         payoff = PayoffAnalyzer(datasource, raise_exceptions=True)
         payoff.load_campaign(campaign, date=analysis_date)
