@@ -11,3 +11,4 @@ django-filter
 matplotlib
 requests
 lxml
+lz4
